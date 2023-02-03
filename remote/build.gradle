@@ -1,0 +1,70 @@
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+}
+
+android {
+    namespace 'dev.miran.remote'
+    compileSdk 33
+
+    defaultConfig {
+        targetSdk minSdkVersion
+        targetSdk targetSdkVersion
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+
+        buildConfigField 'String', 'API_BASE_URL', '"' + project.properties['api_base_url'] + '"'
+        buildConfigField 'String', 'API_KEY', '"' + project.properties['api_key'] + '"'
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
+dependencies {
+
+
+    implementation project(path: ':repository')
+    implementation project(path: ':entity')
+
+    implementation "androidx.core:core-ktx:$core_ktx"
+
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+
+
+    //region basic tools
+    implementation "com.google.dagger:dagger:$google_dagger"
+    implementation "com.jakewharton.timber:timber:5.0.1"
+    //endregion basic tools
+
+    //region moshi
+    implementation "com.squareup.moshi:moshi:1.13.0"
+    implementation "com.squareup.moshi:moshi-kotlin:1.13.0"
+    implementation "com.squareup.retrofit2:converter-moshi:2.9.0"
+    //endregion moshi
+
+    //region okhttp
+    implementation "com.squareup.okhttp3:okhttp:5.0.0-alpha.5"
+    implementation "com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.5"
+    implementation "com.squareup.retrofit2:retrofit:2.9.0"
+    //endregion okhttp
+
+
+    // Paging 3.0
+    implementation "androidx.paging:paging-runtime:3.1.1"
+}
