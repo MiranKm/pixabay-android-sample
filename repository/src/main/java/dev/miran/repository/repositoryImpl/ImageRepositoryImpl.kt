@@ -16,9 +16,17 @@ class ImageRepositoryImpl @Inject constructor(
     private val localDataSource: ImageLocalDataSource,
 ) : ImageRepository {
 
-    override suspend fun getImageByQuery(value: String) = localDataSource.updateLocalImages(
-        apiDataSource.getImageByQuery(value).hits.toEntity().toLocalDTO()
+    override suspend fun getImageByQuery(value: String, imageType:String?) = localDataSource.updateLocalImages(
+        apiDataSource.getImageByQuery(value, imageType).hits.toEntity().toLocalDTO()
     )
+
+    override suspend fun getImageById(id: Int): List<HitsItem> =
+        apiDataSource.getImageById(id).hits.map { it.toEntity() }
+
+
+    override fun clearAllImages() {
+        localDataSource.clearAllImages()
+    }
 
     override suspend fun loadImages(): Flow<List<HitsItem>> = localDataSource.getAllImages().map {
         it.toEntity()

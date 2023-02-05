@@ -10,7 +10,7 @@ data class HitsItem(
 	val comments: Int? = null,
 	val type: String? = null,
 	val imageHeight: Int? = null,
-	val tags: String? = null,
+	val tags: String="",
 	val previewWidth: Int? = null,
 	val downloads: Int? = null,
 	val collections: Int? = null,
@@ -19,7 +19,7 @@ data class HitsItem(
 	val pageURL: String? = null,
 	val imageSize: Int? = null,
 	val webformatWidth: Int? = null,
-	val user: String? = null,
+	val user: String,
 	val views: Int? = null,
 	val likes: Int? = null
 )

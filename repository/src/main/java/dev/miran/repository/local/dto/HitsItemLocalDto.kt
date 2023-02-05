@@ -29,7 +29,7 @@ data class HitsItemLocalDto(
 
     val imageHeight: Int? = null,
 
-    val tags: String? = null,
+    val tags: String,
 
     val previewWidth: Int? = null,
 
@@ -48,7 +48,7 @@ data class HitsItemLocalDto(
 
     val webformatWidth: Int? = null,
 
-    val user: String? = null,
+    val user: String,
 
     val views: Int? = null,
 

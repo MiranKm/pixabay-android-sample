@@ -35,7 +35,7 @@ data class HitsItemRemoteDto(
 	val imageHeight: Int? = null,
 
 	@Json(name="tags")
-	val tags: String? = null,
+	val tags: String,
 
 	@Json(name="previewWidth")
 	val previewWidth: Int? = null,
@@ -63,7 +63,7 @@ data class HitsItemRemoteDto(
 	val webformatWidth: Int? = null,
 
 	@Json(name="user")
-	val user: String? = null,
+	val user: String,
 
 	@Json(name="views")
 	val views: Int? = null,

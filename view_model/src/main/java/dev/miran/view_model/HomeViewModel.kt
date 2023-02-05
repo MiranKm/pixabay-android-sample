@@ -1,18 +1,22 @@
 package dev.miran.view_model
 
+import android.util.Log
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.miran.entity.HitsItem
+import dev.miran.entity.ImageType
 import dev.miran.usecase.HomeUseCase
 import dev.miran.view_model.util.UiState
-import kotlinx.coroutines.Dispatchers
+import dev.miran.view_model.util.launchInIo
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import javax.inject.Inject
+
+private const val TAG = "HomeViewModel"
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
@@ -20,6 +24,7 @@ class HomeViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val searchQuery = mutableStateOf("fruits")
+    private var selectedImageType by mutableStateOf(ImageType.all)
 
     private val _imagesState = MutableStateFlow<UiState<List<HitsItem>>>(UiState.Idle)
     val imagesState = _imagesState.asStateFlow()
@@ -31,13 +36,10 @@ class HomeViewModel @Inject constructor(
 
 
     private fun initialLoad() {
-
-
-        viewModelScope.launch(Dispatchers.IO) {
-            try{
-                homeUseCase.initialLoad("fruits")
-
-            }catch (e:Exception){
+        launchInIo {
+            try {
+                homeUseCase.initialLoad("fruits", ImageType.all.name)
+            } catch (_: Exception) {
 
             }
         }
@@ -48,29 +50,36 @@ class HomeViewModel @Inject constructor(
         searchQuery.value = value
     }
 
-    fun searchNewImages() {
-        viewModelScope.launch {
-            try{
-                homeUseCase.getImageByQuery(searchQuery.value)
-            }catch (e:Exception){
+    fun setImageTypeFilter(imageType: ImageType) {
+        selectedImageType = imageType
+    }
 
+    fun getSelectedFilterImageType(): ImageType =
+        selectedImageType
+
+
+    fun searchNewImages() {
+        launchInIo {
+            try {
+                homeUseCase.clearAllImages()
+                homeUseCase.getImageByQuery(searchQuery.value, selectedImageType.name)
+            } catch (e: Exception) {
+                Log.e(TAG, "searchNewImages: ", e)
             }
         }
-        loadLocalImages()
     }
 
     private fun loadLocalImages() {
-        _imagesState.update {
-            UiState.Loading
-        }
-        viewModelScope.launch {
+        launchInIo {
+            _imagesState.update {
+                UiState.Loading
+            }
             try {
-                homeUseCase.loadImages().collect { hitImages ->
+                homeUseCase.loadImages().collect { hitsItems ->
                     _imagesState.update {
-                        UiState.Success(hitImages)
+                        UiState.Success(hitsItems)
                     }
                 }
-
 
             } catch (e: Exception) {
                 _imagesState.update {
@@ -81,4 +90,9 @@ class HomeViewModel @Inject constructor(
     }
 
     fun getSearchQuery() = searchQuery.value
+
+    companion object {
+
+    }
+
 }

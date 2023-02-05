@@ -1,6 +1,5 @@
 package dev.miran.pixabayapp.ui.theme
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
@@ -27,9 +26,11 @@ private val LightColorPalette = lightColors(
     */
 )
 
-// todo I don't like the dark mode as much just disabled it :)
 @Composable
-fun PixabayAppTheme(darkTheme: Boolean =false /*isSystemInDarkTheme()*/, content: @Composable () -> Unit) {
+fun PixabayAppTheme(
+    darkTheme: Boolean = true /*isSystemInDarkTheme()*/,
+    content: @Composable () -> Unit
+) {
     val colors = if (darkTheme) {
         DarkColorPalette
     } else {

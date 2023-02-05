@@ -17,4 +17,7 @@ interface ImagesDao {
     @Query("SELECT COUNT(*) FROM image_hits")
     fun hitImagesSize(): Int
 
+    @Query("delete from image_hits")
+    fun clearAllImages()
+
 }

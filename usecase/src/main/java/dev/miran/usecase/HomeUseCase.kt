@@ -10,13 +10,14 @@ class HomeUseCase @Inject constructor(
     private val repository: ImageRepository
 ) {
 
-    suspend fun getImageByQuery(query: String) = repository.getImageByQuery(query)
+    suspend fun getImageByQuery(query: String, imageType:String?) = repository.getImageByQuery(query, imageType)
     suspend fun loadImages(): Flow<List<HitsItem>> = repository.loadImages()
+    fun clearAllImages() = repository.clearAllImages()
 
-    suspend fun initialLoad(query: String) {
+    suspend fun initialLoad(query: String, imageType: String?) {
         val currentSize = repository.loadImagesSize()
         if (currentSize == 0) {
-            getImageByQuery(query)
+            getImageByQuery(query,imageType )
         }
     }
 }

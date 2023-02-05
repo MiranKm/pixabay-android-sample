@@ -18,4 +18,8 @@ class ImagesDatabaseDataSource @Inject constructor(
         imagesDao.insertAll(values)
 
     override fun loadImagesSize(): Int = imagesDao.hitImagesSize()
+
+    override fun clearAllImages() {
+        imagesDao.clearAllImages()
+    }
 }

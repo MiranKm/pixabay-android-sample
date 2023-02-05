@@ -7,4 +7,5 @@ interface ImageLocalDataSource {
     suspend fun getAllImages(): Flow<List<HitsItemLocalDto>>
     suspend fun updateLocalImages(values: List<HitsItemLocalDto>)
     fun loadImagesSize(): Int
+    fun clearAllImages()
 }
